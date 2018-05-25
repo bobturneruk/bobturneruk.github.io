@@ -1,9 +1,29 @@
 ---
 title: "R versus the microtitre plate reader"
-output: html_notebook
+output:
+  html_notebook:
+    toc: true
+    toc_float: true
+    includes:
+       in_header: plate_reader_header.html
 author: Bob Turner
 date: May 2018
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE )
+
+#Create myheader.html
+fileConn <- file("plate_reader_header.html")
+
+og_tags<-'<meta property="og:title" content="R versus the microtitre plate reader" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://bobturneruk.github.io/R%20v%20plate%20reader.nb.html" />
+<meta property="og:image" content="https://bobturneruk.github.io/plate_reader_thumbnail.png" />'
+
+writeLines(og_tags, fileConn)
+close(fileConn)
+```
 
 I've recently been using a microtitre plate reader for some experiments. These useful devices take a microtitre plate (which has multiple wells in which to set up loads of experiments in parallel) and read off some property of each such as turbidity or fluorescence.
 
@@ -24,11 +44,11 @@ library(viridis)
 
 Rather than use a real life example, I'm going to make a .csv file similar to the one that comes from the machine for this. Do skip this section if you're not interested in the the details of how the data was simulated. You can find the .csv file [here](plate_eg.csv). And skip to the bit about loading it in [here](#reading).
 
-##Simulating a plate reader ouput .csv file
+#Simulating a plate reader ouput .csv file
 
 This happens in two stages, first simulating the data and then saving it as a .csv file. 
 
-###Simulation
+##Simulation
 
 I'm going to imagine that the first 6 wells from top left to bottom right are controls with a value of zero. I'm then going to simulate blocks of 6 wells with a random mean between 0.5 and 1.5 drawn from a uniform distribution (same same mean for all 6 wells), and a standard deviation of 0.2, simulating some random variability. I'm imagining each block represents some characteristic of a different species of bacteria (see photo below). The last 12 wells, I'll leave empty. This code is a bit inelegant, but much more complex layouts are possible. I know. I've seen them!
 
@@ -57,7 +77,7 @@ row.names(plate_eg)<-LETTERS[seq(1,8)] #name the rows as they would be on the pl
 
 ![Microtitre plate labelled up as per simulation](my_plate_pic.jpg)
 
-###Write to disk
+##Write to disk
 
 Saving to disk is done with a simple line of code.
 
@@ -67,11 +87,11 @@ write.csv(plate_eg,"plate_eg.csv")
 
 <a id="reading"></a>
 
-##Reading the plate reader .csv file 
+#Reading the plate reader .csv file 
 
 OK. This is where one would start if you just had a file from your plate reader (which is the real point of this note!).
 
-###Read the file
+##Read the file
 
 The following code will read in the data. It then converts it into "long format" ([have a look at this](http://www.cookbook-r.com/Manipulating_data/Converting_data_between_wide_and_long_format/#reshape2)), in order to do this (making use of the row names as a variable) it seems it must first be made into a matrix. I finally sort by row, then column.
 
@@ -84,7 +104,7 @@ plate<-read.csv("plate_eg.csv",row.names = 1) %>%
 head(plate,8)
 ```
 
-###Do a quick plot
+##Do a quick plot
 
 I can then do a quick visualisation of the plate data. R and ggplot2 allow me much more flexibility in the way I do this than the plate reader software.
 
@@ -101,7 +121,7 @@ ggplot(plate,aes(x=ColID,y=RowID,fill=value,label=signif(value,2)))+
 
 However, this plot lacks any information about what's actually in the plate. We want to be able to draw some conclusions based on our experiment!
 
-###Save a list of wells
+##Save a list of wells
 
 I'm going to save a list of all the wells to a .csv file
 
@@ -113,7 +133,7 @@ write.csv(data.frame(RowID=plate$RowID,ColID=plate$ColID,SampleID=NA),"well_list
 
 This can then be loaded into a spreadsheet to specify what's in each well on the plate. This is one of the times where it's easier to drop out of R. And while this may seem long-winded, if I'm doing the same plate assay repeatedly (say 20 times), I can re-use my annotation file. This will save a lot of time compared to doing everything in a spreadsheet.
 
-###Load annotated list of wells
+##Load annotated list of wells
 
 The [annotated list of wells](well_list_annotated.csv) is loaded in like so:
 
@@ -127,7 +147,7 @@ head(well_list_annotated,8)
 
 I have deliberately not labelled the last 12 wells (which I'm imagining were empty).
 
-###Label the data using the annotations
+##Label the data using the annotations
 
 Next, I can make use of a join (an idea rooted in databases) to match up the wells to the annotations (sample IDs). Then, a select statement drops all of the row and column IDs from the resulting data frame, leaving me with a set of meaningfully labelled data. (The warning here is not a problem).
 
@@ -138,11 +158,11 @@ plate_annotated<-right_join(plate,well_list_annotated) %>%
 head(plate_annotated,8)
 ```
 
-##Analyse data
+#Analyse data
 
 Now I have my data nicely formatted, it's much easier to analyse and visualise.
 
-###Summarise the data
+##Summarise the data
 
 I can produce a summary table, with whatever statistics I want to calculate. In this case, mean, standard error and number of samples.
 
@@ -156,7 +176,7 @@ plate_annotated %>%
 
 ```
 
-###Visually compare groups
+##Visually compare groups
 
 Lastly, I can plot the data grouped for each sample in order to visually compare values.
 
