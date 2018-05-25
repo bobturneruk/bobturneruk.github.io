@@ -1,6 +1,8 @@
 ---
 title: "R versus the microtitre plate reader"
 output: html_notebook
+author: Bob Turner
+date: May 2018
 ---
 
 I've recently been using a microtitre plate reader for some experiments. These useful devices take a microtitre plate (which has multiple wells in which to set up loads of experiments in parallel) and read off some property of each such as turbidity or fluorescence.
@@ -163,7 +165,6 @@ ggplot(plate_annotated,aes(x=SampleID,y=value,colour=SampleID)) +
   stat_summary(fun.y = "mean", geom = "point", colour="black") +
   stat_summary(fun.data = mean_se, geom = "errorbar") +
   geom_jitter() +
-  labs(x="Group",y=expression(OD[600]),colour="Group") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, face = "italic")) + 
   theme(legend.position="none")
 ```
