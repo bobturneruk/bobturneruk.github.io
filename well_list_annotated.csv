@@ -1,0 +1,85 @@
+RowID,ColID,SampleID
+A,V1,Control
+A,V2,Control
+A,V3,Control
+A,V4,Control
+A,V5,Control
+A,V6,Control
+A,V7,Escheirichia coli
+A,V8,Escheirichia coli
+A,V9,Escheirichia coli
+A,V10,Escheirichia coli
+A,V11,Escheirichia coli
+A,V12,Escheirichia coli
+B,V1,Staphylococcus aureus
+B,V2,Staphylococcus aureus
+B,V3,Staphylococcus aureus
+B,V4,Staphylococcus aureus
+B,V5,Staphylococcus aureus
+B,V6,Staphylococcus aureus
+B,V7,Pseudomonas aeruginosa
+B,V8,Pseudomonas aeruginosa
+B,V9,Pseudomonas aeruginosa
+B,V10,Pseudomonas aeruginosa
+B,V11,Pseudomonas aeruginosa
+B,V12,Pseudomonas aeruginosa
+C,V1,Streptococcus pyogenes
+C,V2,Streptococcus pyogenes
+C,V3,Streptococcus pyogenes
+C,V4,Streptococcus pyogenes
+C,V5,Streptococcus pyogenes
+C,V6,Streptococcus pyogenes
+C,V7,Listeria moncytogenes
+C,V8,Listeria moncytogenes
+C,V9,Listeria moncytogenes
+C,V10,Listeria moncytogenes
+C,V11,Listeria moncytogenes
+C,V12,Listeria moncytogenes
+D,V1,Lactococcus lactis
+D,V2,Lactococcus lactis
+D,V3,Lactococcus lactis
+D,V4,Lactococcus lactis
+D,V5,Lactococcus lactis
+D,V6,Lactococcus lactis
+D,V7,Lactobacillus helveticus
+D,V8,Lactobacillus helveticus
+D,V9,Lactobacillus helveticus
+D,V10,Lactobacillus helveticus
+D,V11,Lactobacillus helveticus
+D,V12,Lactobacillus helveticus
+E,V1,Staphylococcus carnosis
+E,V2,Staphylococcus carnosis
+E,V3,Staphylococcus carnosis
+E,V4,Staphylococcus carnosis
+E,V5,Staphylococcus carnosis
+E,V6,Staphylococcus carnosis
+E,V7,Campylobacter jejuni
+E,V8,Campylobacter jejuni
+E,V9,Campylobacter jejuni
+E,V10,Campylobacter jejuni
+E,V11,Campylobacter jejuni
+E,V12,Campylobacter jejuni
+F,V1,Helicobacter pylori
+F,V2,Helicobacter pylori
+F,V3,Helicobacter pylori
+F,V4,Helicobacter pylori
+F,V5,Helicobacter pylori
+F,V6,Helicobacter pylori
+F,V7,Neisseria innocua
+F,V8,Neisseria innocua
+F,V9,Neisseria innocua
+F,V10,Neisseria innocua
+F,V11,Neisseria innocua
+F,V12,Neisseria innocua
+G,V1,Bacillus subtilis
+G,V2,Bacillus subtilis
+G,V3,Bacillus subtilis
+G,V4,Bacillus subtilis
+G,V5,Bacillus subtilis
+G,V6,Bacillus subtilis
+G,V7,Bacillus megaterium
+G,V8,Bacillus megaterium
+G,V9,Bacillus megaterium
+G,V10,Bacillus megaterium
+G,V11,Bacillus megaterium
+G,V12,Bacillus megaterium
