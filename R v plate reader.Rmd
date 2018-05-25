@@ -25,6 +25,8 @@ writeLines(og_tags, fileConn)
 close(fileConn)
 ```
 
+#Introduction
+
 I've recently been using a microtitre plate reader for some experiments. These useful devices take a microtitre plate (which has multiple wells in which to set up loads of experiments in parallel) and read off some property of each such as turbidity or fluorescence.
 
 ![Microtitre Plate](https://upload.wikimedia.org/wikipedia/commons/b/ba/Microtiter_plate.JPG)
@@ -44,7 +46,7 @@ library(viridis)
 
 Rather than use a real life example, I'm going to make a .csv file similar to the one that comes from the machine for this. Do skip this section if you're not interested in the the details of how the data was simulated. You can find the .csv file [here](plate_eg.csv). And skip to the bit about loading it in [here](#reading).
 
-#Simulating a plate reader ouput .csv file
+#Simulating plate reader ouput
 
 This happens in two stages, first simulating the data and then saving it as a .csv file. 
 
