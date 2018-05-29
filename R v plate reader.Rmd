@@ -72,7 +72,7 @@ write.csv(plate_eg,"plate_eg.csv")
 
 <a id="reading"></a>
 
-#Reading the plate reader .csv file 
+#Reading the .csv file 
 
 OK. This is where one would start if you just had a file from your plate reader (which is the real point of this note!).
 
