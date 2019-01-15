@@ -1,0 +1,123 @@
+---
+title: "Turing Patterns"
+output: html_notebook
+---
+
+
+# Introduction
+
+I've been fascinated by the patterns produced by [reaction-diffusion equations](https://en.wikipedia.org/wiki/Turing_pattern) (and the analogous chemical and biological systems) since I first heard about them many years ago - I've now implemented some of them in code. There are zillions of examples of this sort of thing online (although maybe not in *R*), but this is mine to play with!
+
+```{r}
+#Required libraries
+library(tidyverse)
+library(OpenImageR)
+library(reshape2)
+```
+
+# Reaction Diffusion Equations (Gray-Scott)
+
+These are beautifully descibed [here](http://www.karlsims.com/rd.html). I merely reiterate...
+
+$$A'=A+(D_A\nabla^2A-AB^2+f(1-A))\Delta t$$
+$$B'=B+(D_B\nabla^2B+AB^2-(k+f)B)\Delta t$$
+
+The terms are:
+
+- $A$ the amount of reactant A
+- $B$ the amount of reactant B
+- $D_A$, $D_B$ the diffusion coefficients of the reactants
+- $f$ the feed - this describes the amount of raectant being added to the system
+- $k$ the kill - this descibes the amount of reactant B being removed from the system
+
+Breaking the equations down, as I understand, the terms containing the diffusion coefficients are basically just [Fick's second law](https://en.wikipedia.org/wiki/Fick%27s_laws_of_diffusion) describing how things diffuse. The $AB^2$ terms are about the reaction between A and B and the final terms are to do with reactant being added or removed from the system.
+
+# R implementation
+
+Both of these equations are implemented by R functions. The Laplacian ($\nabla^2$) operator is approximated by a convolution.
+
+```{r}
+laplacian_kernel=matrix(c(.05,.2,.05,.2,-1,.2,.05,.2,.05),nrow=3,ncol=3)
+a_prime<-function(A,B,D_A,f,l_kernel){
+  L_A=convolution(A,l_kernel)
+  A+(D_A*L_A-A*B*B+f*(1-A))
+}
+b_prime<-function(A,B,D_B,f,k,l_kernel){
+  L_B=convolution(B,l_kernel)
+  B+(D_B*L_B+A*B*B-(k+f)*B)
+}
+```
+
+The initial conditions and constants are then established:
+
+```{r}
+
+set.seed(1) #Makes "random" number generation repeatable
+
+size=500 #Image size
+
+#Set up a matrix for reactant A - each cell contains the concentration of the reactant in that region of space
+A=matrix(1,nrow=size,ncol=size)
+rownames(A)=1:size
+colnames(A)=1:size
+
+#Set up matrix for reactant B
+B=matrix(0,nrow=size,ncol=size)
+B[round(0.45*size):round(0.55*size),round(0.45*size):round(0.55*size)]=1
+rownames(B)=1:size
+colnames(B)=1:size
+
+#Initialise constants
+D_A=1
+D_B=.5
+f=.055
+k=.062
+
+```
+
+The functions are then iterated (ideally, generally, we avoid loops in R, but this one is hard to get round). I'm using a data frame to store every 2000th iteration so I can show how the pattern develops over time...
+
+```{r}
+AB_series<-data.frame()
+block_size<-2000
+start_time<-Sys.time()
+for(i in 0:5){
+  #Take "snapshots" of patterns evey block_size iterations
+  AB_series<-AB_series %>% bind_rows(
+    bind_rows(
+      melt(A) %>% add_column(component="A"),
+      melt(B) %>% add_column(component="B")
+    ) %>% add_column(iteration=i*block_size))
+  #Iterate the equations
+  for(j in 1:block_size){
+    A<-a_prime(A,B,D_A,f,laplacian_kernel)
+    B<-b_prime(A,B,D_B,f,k,laplacian_kernel)
+  }
+}
+end_time<-Sys.time()
+end_time-start_time
+```
+
+As you can see, this takes ages, but if I'm doing loops in *R* I suppose I deserve everything I get!
+
+The data frame containing every 2000th iteration is then plotted with *ggplot*:
+
+```{r, fig.height=3, fig.width=9}
+
+AB_series %>%
+  ggplot(aes(x = Var2, y = Var1)) + 
+    geom_raster(aes(fill=value))+
+    coord_fixed()+
+    facet_grid(paste("Reactant",component)~iteration)+
+    scale_fill_viridis_c()+
+    labs(x="x",y="y",fill="Amount", subtitle = "Iteration")+
+    theme(text = element_text(size=16))
+  
+
+
+```
+
+I love how such complex and unexpected patterns emerge from a fairly simple setup. I may come back to this and have a play with the parameters.
+
+See my [website](https://sites.google.com/view/robert-turner) for more code and stuff. Contact me on bob dot turner dot uk at gmail dot com with comments or questions.
+
